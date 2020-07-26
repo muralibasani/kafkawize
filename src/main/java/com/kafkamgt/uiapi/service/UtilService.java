@@ -2,6 +2,8 @@ package com.kafkamgt.uiapi.service;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.DefaultRetryPolicy;
+import com.kafkamgt.uiapi.dao.MailType;
+import com.kafkamgt.uiapi.helpers.HandleDbRequests;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,12 +27,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
 public class UtilService {
-
-    //private UserDetails userDetails;
 
     @Value("${custom.license.key}")
     private
@@ -40,10 +41,7 @@ public class UtilService {
     private
     String organization;
 
-    @Autowired
-    Environment environment;
-
-    //public static boolean licenceLoaded = false;
+    public static boolean licenceLoaded = false;
 
     RestTemplate getRestTemplate(){
         return new RestTemplate();
@@ -105,7 +103,6 @@ public class UtilService {
             hLicenseMap.put("LICENSE_KEY", licenseKey);
             return hLicenseMap;
         } catch (Exception e) {
-            //licenceLoaded = false;
             hLicenseMap.put("LICENSE_STATUS", Boolean.FALSE.toString());
             return hLicenseMap;
         }
@@ -125,7 +122,6 @@ public class UtilService {
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKey keyTmps = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
                 .generateSecret(new PBEKeySpec(password, salt, iterationCount, keyLength));
-       // licenceLoaded = true;
         return new SecretKeySpec(keyTmps.getEncoded(), "AES");
     }
 
@@ -138,4 +134,5 @@ public class UtilService {
     private static byte[] base64Decode(String property) throws IOException {
         return Base64.getDecoder().decode(property);
     }
+
 }

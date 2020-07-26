@@ -61,19 +61,21 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
     @Value("${custom.org.name}")
     String companyInfo;
 
-    @Value("${custom.kafkawize.version:4.1}")
+    @Value("${custom.kafkawize.version:5.0}")
+    private
     String kafkawizeVersion;
 
     @Autowired
+    private
     Environment environment;
 
     public HandleDbRequestsCassandra(){
 
     }
 
-    public HandleDbRequestsCassandra(SelectData cassandraSelectHelper, InsertData cassandraInsertHelper,
-                                     UpdateData cassandraUpdateHelper, DeleteData cassandraDeleteHelper,
-                                     LoadDb loadDb, Cluster cluster, UtilService utilService){
+    HandleDbRequestsCassandra(SelectData cassandraSelectHelper, InsertData cassandraInsertHelper,
+                              UpdateData cassandraUpdateHelper, DeleteData cassandraDeleteHelper,
+                              LoadDb loadDb, Cluster cluster, UtilService utilService){
         this.cassandraSelectHelper = cassandraSelectHelper;
         this.cassandraInsertHelper = cassandraInsertHelper;
         this.cassandraDeleteHelper = cassandraDeleteHelper;
@@ -185,12 +187,27 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
         return cassandraSelectHelper.selectTopicRequestsForTopic(topicName, env);
     }
 
-    public List<Topic> getSyncTopics(String env){
-        return cassandraSelectHelper.selectSyncTopics(env);
+    public List<Topic> getSyncTopics(String env, String teamName){
+        return cassandraSelectHelper.selectSyncTopics(env, teamName);
+    }
+
+    @Override
+    public List<Topic> getTopics(String topicName) {
+        return cassandraSelectHelper.getTopics(topicName);
     }
 
     public List<Acl> getSyncAcls(String env){
         return cassandraSelectHelper.selectSyncAcls(env);
+    }
+
+    @Override
+    public List<Acl> getSyncAcls(String env, String topic) {
+        return cassandraSelectHelper.selectSyncAcls(env, topic);
+    }
+
+    @Override
+    public Acl selectSyncAclsFromReqNo(String reqNo) {
+        return cassandraSelectHelper.selectSyncAclsFromReqNo(reqNo);
     }
 
     public List<AclRequests> getAllAclRequests(String requestor){
@@ -220,8 +237,8 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
     }
 
     @Override
-    public HashMap<String, String> getDashboardInfo() {
-        return cassandraSelectHelper.getDashboardInfo();
+    public HashMap<String, String> getDashboardInfo(String teamName) {
+        return cassandraSelectHelper.getDashboardInfo(teamName);
     }
 
     public List<UserInfo> selectAllUsersInfo(){
@@ -236,8 +253,8 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
         return cassandraSelectHelper.selectAcl(req_no);
     }
 
-    public Topic getTopicTeam(String topicName, String env){
-        return cassandraSelectHelper.selectTopicDetails(topicName, env);
+    public List<Topic> getTopicTeam(String topicName){
+        return cassandraSelectHelper.selectTopicDetails(topicName);
     }
 
     public List<Env> selectAllKafkaEnvs(){
@@ -291,6 +308,11 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
         return cassandraDeleteHelper.deleteAclRequest(req_no);
     }
 
+    @Override
+    public String deleteAclSubscriptionRequest(String req_no) {
+        return cassandraDeleteHelper.deleteAclSubscriptionRequest(req_no);
+    }
+
     public String deleteClusterRequest(String clusterId){
         return cassandraDeleteHelper.deleteClusterRequest(clusterId);
     }
@@ -308,6 +330,4 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
     public String deleteSchemaRequest(String topicName, String schemaVersion, String env){
         return cassandraDeleteHelper.deleteSchemaRequest(topicName,schemaVersion, env);
     }
-
-    public String deletePrevAclRecs(List<Acl> aclReqs){ return cassandraDeleteHelper.deletePrevAclRecs(aclReqs);}
 }
