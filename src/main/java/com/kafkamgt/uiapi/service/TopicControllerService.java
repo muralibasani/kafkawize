@@ -51,6 +51,7 @@ public class TopicControllerService {
         log.info(topicRequestReq.getTopicname() + "---" +
                 topicRequestReq.getTeamname() + "---" + topicRequestReq.getEnvironment() +
                 "---" + topicRequestReq.getAppname());
+        topicRequestReq.setRequestor(userDetails.getUsername());
         topicRequestReq.setUsername(userDetails.getUsername());
 
         String topicPartitions = topicRequestReq.getTopicpartitions();
@@ -64,6 +65,16 @@ public class TopicControllerService {
         if(topics!=null && topics.size()>0
                 && !topics.get(0).getTeamname().equals(topicRequestReq.getTeamname()))
             return "{\"result\":\"Failure. This topic is owned by a different team.\"}";
+
+        if(topics!=null && topics.size()>0){
+            int devTopicFound = (int) topics.stream().filter(topic -> topic.getEnvironment().equals(syncCluster)).count();
+            if(devTopicFound != 1){
+                return "{\"result\":\"Failure. This topic does not exist in "+ syncCluster + " cluster.\"}";
+            }
+        }
+        else if(!topicRequestReq.getEnvironment().equals(syncCluster)){
+            return "{\"result\":\"Failure. Please request for a topic first in "+ syncCluster + " cluster.\"}";
+        }
 
         boolean topicExists = false;
         if(topics != null) {
@@ -385,6 +396,19 @@ public class TopicControllerService {
         return topicsListMap;
     }
 
+    class TopicEnvComparator implements Comparator<String> {
+        List<String> orderedEnv = Arrays.asList("DEV", "TST", "ACC", "PRD");
+
+
+        @Override
+        public int compare(String topicEnv1, String topicEnv2) {
+            if(orderedEnv.indexOf(topicEnv1) > orderedEnv.indexOf(topicEnv2))
+                return 1;
+            else
+                return -1;
+        }
+    }
+
     class TopicNameComparator implements Comparator<Topic> {
         @Override
         public int compare(Topic topic1, Topic topic2) {
@@ -525,8 +549,11 @@ public class TopicControllerService {
                 mp.setSequence(counterInc + "");
                 Topic topicSOT = topicsFromSOT.get(i);
 
+                List<String> envList = topicSOT.getEnvironmentsList();
+                envList = envList.stream().sorted(new TopicEnvComparator()).collect(Collectors.toList());
+
                 mp.setCluster(topicSOT.getTopicPK().getEnvironment());
-                mp.setEnvironmentsList(topicSOT.getEnvironmentsList());
+                mp.setEnvironmentsList(envList);
                 mp.setTopicName(topicSOT.getTopicname());
                 mp.setTeamname(topicSOT.getTeamname());
 

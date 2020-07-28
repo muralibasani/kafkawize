@@ -72,6 +72,7 @@ public class TopicControllerServiceTest {
         env.setPort("9092");
         env.setName("DEV");
         ReflectionTestUtils.setField(topicControllerService, "manageDatabase", manageDatabase);
+        ReflectionTestUtils.setField(topicControllerService, "syncCluster", "DEV");
         when(manageDatabase.getHandleDbRequests()).thenReturn(handleDbRequests);
         loginMock();
     }
@@ -360,7 +361,7 @@ public class TopicControllerServiceTest {
     private TopicRequest getCorrectTopic(){
 
         TopicRequest topicRequest = new TopicRequest();
-        topicRequest.setEnvironment(env.getHost());
+        topicRequest.setEnvironment(env.getName());
         topicRequest.setTopicpartitions("2");
         topicRequest.setRequesttime(new Timestamp(System.currentTimeMillis()));
         return topicRequest;
@@ -369,7 +370,7 @@ public class TopicControllerServiceTest {
     private TopicRequest getFailureTopic(){
 
         TopicRequest topicRequest = new TopicRequest();
-        topicRequest.setEnvironment(env.getHost());
+        topicRequest.setEnvironment(env.getName());
         topicRequest.setTopicpartitions("abc");
         topicRequest.setRequesttime(new Timestamp(System.currentTimeMillis()));
         return topicRequest;
@@ -378,7 +379,7 @@ public class TopicControllerServiceTest {
     private TopicRequest getFailureTopic1(){
 
         TopicRequest topicRequest = new TopicRequest();
-        topicRequest.setEnvironment(env.getHost());
+        topicRequest.setEnvironment(env.getName());
         topicRequest.setTopicpartitions("-1");
         topicRequest.setRequesttime(new Timestamp(System.currentTimeMillis()));
         return topicRequest;
@@ -388,7 +389,7 @@ public class TopicControllerServiceTest {
 
         TopicRequest topicRequest = new TopicRequest();
         topicRequest.setTopicname(name);
-        topicRequest.setEnvironment(env.getHost());
+        topicRequest.setEnvironment(env.getName());
         topicRequest.setTopicpartitions("2");
         topicRequest.setRequesttime(new Timestamp(System.currentTimeMillis()));
         return topicRequest;
@@ -398,7 +399,7 @@ public class TopicControllerServiceTest {
 
         TopicRequest topicRequest = new TopicRequest();
         topicRequest.setTopicname("testtopic1");
-        topicRequest.setEnvironment(env.getHost());
+        topicRequest.setEnvironment(env.getName());
         topicRequest.setTopicpartitions("2");
         topicRequest.setRequesttime(new Timestamp(System.currentTimeMillis()));
 
@@ -407,7 +408,7 @@ public class TopicControllerServiceTest {
 
         TopicRequest topicRequest1 = new TopicRequest();
         topicRequest1.setTopicname("testtopic12");
-        topicRequest1.setEnvironment(env.getHost());
+        topicRequest1.setEnvironment(env.getName());
         topicRequest1.setTopicpartitions("2");
         topicRequest1.setRequesttime(new Timestamp(System.currentTimeMillis()));
 

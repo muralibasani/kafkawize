@@ -373,10 +373,12 @@
 											<h6 class="text-primary">Replica factor</h6><b>{{ topicRequest[0].replicationfactor }}</b>
 										</div>
 										<div class="p-2 border-right">
-											<h6 class="text-primary">Cluster</h6><b>{{ topicRequest[0].environment }}</b>
+											<h6 class="text-primary">Cluster</h6><b>
+											<span class="badge badge-info">{{ topicRequest[0].environment }}</span>
+										</b>
 										</div>
 										<div class="p-2 border-right">
-											<h6 class="text-primaryt">Requestor</h6><b>{{ topicRequest[0].username }}</b>
+											<h6 class="text-primaryt">Requestor</h6><b>{{ topicRequest[0].requestor }}</b>
 										</div>
 										<div class="p-2 border-right">
 											<h6 class="text-primary">Team</h6><b>{{ topicRequest[0].teamname }}</b>
@@ -417,10 +419,10 @@
 											<h6 class="text-primary">Replica factor</h6><b>{{ topicRequest[1].replicationfactor }}</b>
 										</div>
 										<div class="p-2 border-right">
-											<h6 class="text-primary">Cluster</h6><b>{{ topicRequest[1].environment }}</b>
+											<h6 class="text-primary">Cluster</h6><b><span class="badge badge-info">{{ topicRequest[1].environment }}</span></b>
 										</div>
 										<div class="p-2 border-right">
-											<h6 class="text-primary">Requestor</h6><b>{{ topicRequest[1].username }}</b>
+											<h6 class="text-primary">Requestor</h6><b>{{ topicRequest[1].requestor }}</b>
 										</div>
 										<div class="p-2 border-right">
 											<h6 class="text-primary">Team</h6><b>{{ topicRequest[1].teamname }}</b>
@@ -444,23 +446,6 @@
 			<div id="successbar">{{ alert }}</div>
 			<div id="alertbar">{{ alertnote }}</div>
 
-
-			<!-- Row -->
-
-
-			<!-- Row -->
-
-			<!-- ============================================================== -->
-			<!-- End PAge Content -->
-			<!-- ============================================================== -->
-			<!-- ============================================================== -->
-			<!-- Right sidebar -->
-			<!-- ============================================================== -->
-			<!-- .right-sidebar -->
-
-			<!-- ============================================================== -->
-			<!-- End Right sidebar -->
-			<!-- ============================================================== -->
 		</div>
 		<!-- ============================================================== -->
 		<!-- End Container fluid  -->

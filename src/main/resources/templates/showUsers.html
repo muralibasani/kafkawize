@@ -395,7 +395,6 @@
 										<th>Name</th>
 										<th>Team</th>
 										<th>Role</th>
-										<th>EmailId</th>
 										<th width="10%" ng-show="statusauthexectopics_su=='Authorized'">Delete</th>
 									</tr>
 									</thead>
@@ -410,7 +409,7 @@
 											<span class="badge badge-secondary">{{ userDetails.role }}</span></td>
 										<td ng-show="userDetails.role == 'SUPERUSER'">
 											<span class="badge badge-danger">{{ userDetails.role }}</span></td>
-										<td>{{ userDetails.mailid }}</td>
+
 										<td ng-show="statusauthexectopics_su=='Authorized'">
 											<button type="button" ng-click="deleteUser(userDetails.username)"
 													class="btn btn-secondary btn-circle">
