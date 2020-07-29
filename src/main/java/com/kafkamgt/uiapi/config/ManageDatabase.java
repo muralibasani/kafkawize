@@ -62,21 +62,23 @@ public class ManageDatabase {
 //            }
 //        }
 
-        UtilService.licenceLoaded = true;
+//        UtilService.licenceLoaded = true;
 
         if (dbStore != null && dbStore.equals("rdbms")) {
             handleDbRequests = handleJdbc();
         } else
             handleDbRequests = handleCassandra();
 
-        if(UtilService.licenceLoaded) {
-            handleDbRequests.connectToDb("licenseKey");
-        }else
-        {
-//            log.info(invalidKeyMessage);
-            log.info("Herre....");
-            System.exit(0);
-        }
+        handleDbRequests.connectToDb("licenseKey");
+
+//        if(UtilService.licenceLoaded) {
+//            handleDbRequests.connectToDb("licenseKey");
+//        }else
+//        {
+////            log.info(invalidKeyMessage);
+//            log.info("Herre....");
+//            System.exit(0);
+//        }
     }
 
     public HandleDbRequests getHandleDbRequests(){

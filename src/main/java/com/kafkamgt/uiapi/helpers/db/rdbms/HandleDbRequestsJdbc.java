@@ -5,7 +5,6 @@ import com.kafkamgt.uiapi.helpers.HandleDbRequests;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,15 +32,6 @@ public class HandleDbRequestsJdbc implements HandleDbRequests {
 
     @Autowired
     LoadDbJdbc loadDbJdbc;
-
-    @Value("${custom.org.name}")
-    String companyInfo;
-
-    @Value("${custom.kafkawize.version:4.1}")
-    String kafkawizeVersion;
-
-    @Autowired
-    Environment environment;
 
     public void connectToDb(String licenseKey) throws Exception {
         if(dbScriptsExecution.equals("auto")){

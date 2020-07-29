@@ -68,7 +68,7 @@ public class HandleDbRequestsCassandraTest {
 
         ReflectionTestUtils.setField(handleDbRequestsCassandra, "clusterConnPort", 9042);
         ReflectionTestUtils.setField(handleDbRequestsCassandra, "keyspace", "kafkamanagementapi");
-        ReflectionTestUtils.setField(handleDbRequestsCassandra, "environment", environment);
+        //ReflectionTestUtils.setField(handleDbRequestsCassandra, "environment", environment);
     }
 
     @Test

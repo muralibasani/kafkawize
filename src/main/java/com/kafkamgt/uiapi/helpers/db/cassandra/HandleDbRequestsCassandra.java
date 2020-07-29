@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -20,7 +19,7 @@ import java.util.List;
 @Component
 public class HandleDbRequestsCassandra implements HandleDbRequests {
 
-    private static Logger LOG = LoggerFactory.getLogger(HandleDbRequestsCassandra.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HandleDbRequestsCassandra.class);
 
     @Autowired(required=false)
     private SelectData cassandraSelectHelper;
@@ -41,7 +40,6 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
     private LoadDb loadDb;
 
     private Cluster cluster;
-    private Session session;
 
     @Value("${custom.cassandradb.url:@null}")
     private String clusterConnHost;
@@ -57,17 +55,6 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
 
     @Value("${custom.dbscripts.dropall_recreate:false}")
     private String dbScriptsDropAllRecreate;
-
-    @Value("${custom.org.name}")
-    String companyInfo;
-
-    @Value("${custom.kafkawize.version:5.0}")
-    private
-    String kafkawizeVersion;
-
-    @Autowired
-    private
-    Environment environment;
 
     public HandleDbRequestsCassandra(){
 
@@ -95,7 +82,7 @@ public class HandleDbRequestsCassandra implements HandleDbRequests {
         try {
             cluster = utilService.getCluster(clusterConnHost, clusterConnPort, myCodecRegistry);
 
-            session = cluster.connect();
+            Session session = cluster.connect();
 
             if(dbScriptsExecution.equals("auto")){
                 loadDb.session = session;
