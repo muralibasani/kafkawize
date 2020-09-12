@@ -69,7 +69,6 @@ public class InsertData {
         getBoundStatementSchemas();
         getBoundStatementTeams();
         getBoundStatementUsers();
-        getBoundStatementRegisterUsers();
         getBoundStatementEnvs();
     }
 
@@ -157,14 +156,6 @@ public class InsertData {
         String insertstat = "INSERT INTO " + keyspace + "."+tableName+"(fullname, userid, pwd, team, roleid, mailid) " +
                 "VALUES (?,?,?,?,?,?);";
         boundStatementUsers = getBoundStatement(insertstat);
-    }
-
-    private void getBoundStatementRegisterUsers() {
-        String tableName = "registerusers";
-        String insertstat = "INSERT INTO " + keyspace + "."+tableName+"(fullname, userid, pwd, team," +
-                " roleid, mailid, status, registeredtime) " +
-                "VALUES (?,?,?,?,?,?,?,?);";
-        boundStatementRegisterUsers = getBoundStatement(insertstat);
     }
 
     private void getBoundStatementTeams() {

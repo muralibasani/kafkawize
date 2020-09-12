@@ -36,6 +36,6 @@ Insert into env(name,host,port,protocol,type) values ('DEV_SCH','localhost','808
 
 /* Insert product and version */
 
-Insert into productdetails(name,version) values ('KafkaWize','4.0');
+Insert into productdetails(name,version) values ('KafkaWize','4.3');
 
 commit;

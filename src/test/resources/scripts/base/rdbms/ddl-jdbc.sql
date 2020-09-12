@@ -105,19 +105,6 @@ Create table if not exists users(
 	PRIMARY KEY(userid)
 );
 
-Create table if not exists registerusers(
-	userid varchar(20),
-	pwd varchar(50),
-	team varchar(150),
-	roleid varchar(20),
-	fullname varchar(50),
-	mailid varchar(150),
-	status varchar(25),
-	registeredtime timestamp,
-	approver varchar(25),
-	PRIMARY KEY(userid)
-);
-
 Create table if not exists env(
 	name varchar(10),
 	host varchar(20),
