@@ -7,6 +7,7 @@ import com.kafkamgt.uiapi.dao.Team;
 import com.kafkamgt.uiapi.dao.UserInfo;
 import com.kafkamgt.uiapi.error.KafkawizeException;
 import com.kafkamgt.uiapi.helpers.HandleDbRequests;
+import com.kafkamgt.uiapi.model.UserInfoModel;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
@@ -425,7 +426,7 @@ public class UiConfigControllerServiceTest {
     @Test
     public void showUsers() {
         when(handleDbRequests.selectAllUsersInfo()).thenReturn(getUsernfoList());
-        List<UserInfo> userInfoList = uiConfigControllerService.showUsers();
+        List<UserInfoModel> userInfoList = uiConfigControllerService.showUsers();
         assertEquals(1,userInfoList.size());
     }
 

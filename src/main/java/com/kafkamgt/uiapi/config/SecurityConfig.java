@@ -93,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         userDetailsBuilder = auth.inMemoryAuthentication()
                 .passwordEncoder(encoder)
                 .withUser(userInfo.getUsername())
-                .password(encoder.encode(userInfo.getPwd()))
+                .password(encoder.encode(base64DecodePwd(userInfo.getPwd())))
                 .roles(userInfo.getRole());
 
         while(iter.hasNext()){
@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             userDetailsBuilder
                     .and()
                     .withUser(userInfo.getUsername())
-                    .password(encoder.encode(userInfo.getPwd()))
+                    .password(encoder.encode(base64DecodePwd(userInfo.getPwd())))
                     .roles(userInfo.getRole());
         }
 
@@ -118,11 +118,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 PasswordEncoderFactories.createDelegatingPasswordEncoder();
         while(iter.hasNext()){
             userInfo = iter.next();
-            globalUsers.put(userInfo.getUsername(),encoder.encode(userInfo.getPwd())+","+
+            globalUsers.put(userInfo.getUsername(),
+                    encoder.encode(base64DecodePwd(userInfo.getPwd()))+","+
             userInfo.getRole()+",enabled");
         }
 
         return new InMemoryUserDetailsManager(globalUsers);
     }
 
+    private String base64DecodePwd(String pwd){
+        return new String(Base64.getDecoder().decode(pwd));
+    }
 }

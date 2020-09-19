@@ -2,6 +2,7 @@ package com.kafkamgt.uiapi.controller;
 
 import com.kafkamgt.uiapi.dao.*;
 import com.kafkamgt.uiapi.error.KafkawizeException;
+import com.kafkamgt.uiapi.model.UserInfoModel;
 import com.kafkamgt.uiapi.service.UiConfigControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -121,7 +122,7 @@ public class UiConfigController {
     }
 
     @RequestMapping(value = "/showUserList", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<UserInfo>> showUsers(){
+    public ResponseEntity<List<UserInfoModel>> showUsers(){
         return new ResponseEntity<>(uiConfigControllerService.showUsers(), HttpStatus.OK);
     }
 

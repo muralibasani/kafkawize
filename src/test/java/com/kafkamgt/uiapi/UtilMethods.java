@@ -58,6 +58,17 @@ public class UtilMethods {
         return userInfo;
     }
 
+    public List<UserInfoModel> getUserInfoListModel(String username, String role){
+        List<UserInfoModel> userInfoList = new ArrayList<>();
+        UserInfoModel userInfo = new UserInfoModel();
+        userInfo.setTeam("Team1");
+        userInfo.setUsername(username);
+        userInfo.setRole(role);
+        userInfoList.add(userInfo);
+
+        return userInfoList;
+    }
+
     public List<UserInfo> getUserInfoList(String username, String role){
         List<UserInfo> userInfoList = new ArrayList<>();
         UserInfo userInfo = new UserInfo();

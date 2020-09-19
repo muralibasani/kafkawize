@@ -6,6 +6,7 @@ import com.kafkamgt.uiapi.dao.Env;
 import com.kafkamgt.uiapi.dao.Team;
 import com.kafkamgt.uiapi.dao.UserInfo;
 import com.kafkamgt.uiapi.helpers.HandleDbRequests;
+import com.kafkamgt.uiapi.model.UserInfoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.json.GsonJsonParser;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Service
 public class UiConfigControllerService {
@@ -256,11 +259,17 @@ public class UiConfigControllerService {
         if(userId.equals("superuser") || userDetails.getUsername().equals(userId))
             return envAddResult;
 
+        inMemoryUserDetailsManager.deleteUser(User.withUsername(userId).toString());
+
         try {
             return "{\"result\":\""+manageDatabase.getHandleDbRequests().deleteUserRequest(userId)+"\"}";
         }catch (Exception e){
             return "{\"result\":\"failure "+e.getMessage()+"\"}";
         }
+    }
+
+    private String base64EncodePwd(String pwd){
+        return Base64.getEncoder().encodeToString(pwd.getBytes());
     }
 
     public String addNewUser(UserInfo newUser){
@@ -275,6 +284,7 @@ public class UiConfigControllerService {
             inMemoryUserDetailsManager.createUser(User.withUsername(newUser.getUsername())
                     .password(encoder.encode(newUser.getPwd()))
                     .roles(newUser.getRole()).build());
+            newUser.setPwd(base64EncodePwd(newUser.getPwd()));
 
             HandleDbRequests dbHandle = manageDatabase.getHandleDbRequests();
 
@@ -319,9 +329,17 @@ public class UiConfigControllerService {
         }
     }
 
-    public List<UserInfo> showUsers(){
+    public List<UserInfoModel> showUsers(){
+        List<UserInfoModel> userInfoModels = new ArrayList<>();
 
-        return manageDatabase.getHandleDbRequests().selectAllUsersInfo();
+        List<UserInfo> userList = manageDatabase.getHandleDbRequests().selectAllUsersInfo();
+        userList.forEach(userListItem -> {
+            UserInfoModel userInfoModel = new UserInfoModel();
+            copyProperties(userListItem,userInfoModel);
+            userInfoModels.add(userInfoModel);
+        });
+
+        return userInfoModels;
     }
 
     public UserInfo getMyProfileInfo(){
