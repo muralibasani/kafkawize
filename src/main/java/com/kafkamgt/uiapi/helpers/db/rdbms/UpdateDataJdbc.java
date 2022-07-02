@@ -208,7 +208,6 @@ public class UpdateDataJdbc {
                 Acl aclObj = new Acl();
                 copyProperties(aclReq, aclObj);
                 aclObj.setTeamId(aclReq.getRequestingteam());
-
                 acls = new ArrayList<>();
                 aclObj.setAclip(aclString);
                 aclObj.setAclssl(aclReq.getAcl_ssl());
