@@ -436,8 +436,8 @@ public class UsersTeamsControllerService {
             copyProperties(newUser, userInfo);
             userInfo.setPwd(newUser.getUserPassword());
             String result = dbHandle.addNewUser(userInfo);
-            // TODO remove the line below
-            log.info("pwd : "+decodePwd(newUser.getUserPassword()));
+
+//            log.info("pwd : "+decodePwd(newUser.getUserPassword()));
             if(isExternal) {
                 if(newUser.getUserPassword().equals(""))
                     mailService.sendMail(newUser.getUsername(), newUser.getUserPassword(),

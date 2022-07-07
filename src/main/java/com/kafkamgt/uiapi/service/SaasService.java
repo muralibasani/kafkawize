@@ -172,8 +172,8 @@ public class SaasService {
             return true;
         }
         String activationUrl = commonUtilsService.getBaseUrl() + "/userActivation?activationId=" + newUserTarget.getRegistrationId();
-        // TODO remove the below logging
-        log.info(activationUrl);
+
+//        log.info(activationUrl);
         RegisterUserInfo registerUserInfo = new RegisterUserInfo();
         copyProperties(newUserTarget, registerUserInfo);
 
