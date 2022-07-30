@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +44,9 @@ public class SecurityConfigNoSSO extends WebSecurityConfigurerAdapter  {
 
     @Value("${kafkawize.login.authentication.type}")
     private String authenticationType;
+
+    @Value("${kafkawize.login.token.authentication:false}")
+    private boolean tokenAuthentication;
 
     @Value("${spring.ldap.base:@null}")
     private String ldapBase;
@@ -89,6 +93,9 @@ public class SecurityConfigNoSSO extends WebSecurityConfigurerAdapter  {
     @Autowired
     private KwRequestFilter kwRequestFilterup;
 
+    @Autowired(required = false)
+    private JwtRequestFilter jwtRequestFilter;
+
     private void shutdownApp(){
         // ((ConfigurableApplicationContext) contextApp).close();
     }
@@ -102,23 +109,37 @@ public class SecurityConfigNoSSO extends WebSecurityConfigurerAdapter  {
                 "/getAllTeamsSUFromRegisterUsers","/registerUser","/resetMemoryCache/**","/userActivation**","/getActivationInfo**"
         };
 
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(staticResources).permitAll()
-                .anyRequest()
-                .fullyAuthenticated()
-                .and()
-                .formLogin()
-                .failureForwardUrl("/login?error")
-                .failureUrl("/login?error")
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/login");
+        String[] staticResourcesHtml = {
+                "/home","/home/**","/register**","/authenticate","/login**","/terms**","/registrationReview**",
+                "/forgotPassword","/getDbAuth","/feedback**","/resetPassword","/getRoles", "/getTenantsInfo","/getBasicInfo",
+                "/getAllTeamsSUFromRegisterUsers","/registerUser","/resetMemoryCache/**","/userActivation**","/getActivationInfo**"
+        };
+
+        if(tokenAuthentication){
+            http.csrf().disable();
+            http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            http.authorizeRequests().antMatchers(staticResourcesHtml).permitAll();
+            http.authorizeRequests().anyRequest().authenticated();
+            http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        }else {
+            http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers(staticResources).permitAll()
+                    .anyRequest()
+                    .fullyAuthenticated()
+                    .and()
+                    .formLogin()
+                    .failureForwardUrl("/login?error")
+                    .failureUrl("/login?error")
+                    .loginPage("/login")
+                    .permitAll()
+                    .and()
+                    .logout().logoutSuccessUrl("/login");
 
 //         Add a filter to validate the username/pwd with every request
-        http.addFilterBefore(kwRequestFilterup, UsernamePasswordAuthenticationFilter.class);
+            http.addFilterBefore(kwRequestFilterup, UsernamePasswordAuthenticationFilter.class);
+        }
     }
 
     @Autowired
