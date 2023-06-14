@@ -27,7 +27,7 @@
         <netty-all.version>4.1.43.Final</netty-all.version>
         <lombok.version>1.18.22</lombok.version>
         <commons-text.version>1.9</commons-text.version>
-        <guava.version>31.0.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <system-rules.version>1.19.0</system-rules.version>
         <h2.version>2.1.210</h2.version>
         <apachepoi.version>5.0.0</apachepoi.version>
